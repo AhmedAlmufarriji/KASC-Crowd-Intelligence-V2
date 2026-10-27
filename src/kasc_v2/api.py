@@ -7,7 +7,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -189,3 +189,29 @@ def scenario(event_id: str = "SIM-E001", minute_index: int = Query(22, ge=0, le=
             "baseline": base, "scenario": modified,
             "estimated_wait_change_min": round(modified["scenario_wait_min"] - base["scenario_wait_min"], 2),
             "warning": "Simplified deterministic queue equation — not a causal or real-world policy estimate"}
+
+
+@app.post("/api/vision/analyze")
+async def vision_analyze(request: Request):
+    """Optional CV detection on supplied image bytes; data is not persisted."""
+    content_type = request.headers.get("content-type", "").split(";")[0].strip()
+    if content_type not in {"image/png", "image/jpeg", "image/webp"}:
+        raise HTTPException(status_code=415, detail="Upload JPEG, PNG or WEBP")
+    length = request.headers.get("content-length")
+    if length:
+        try:
+            parsed = int(length)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail="Invalid content length") from exc
+        if parsed > 8 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="Image must be 8 MB or smaller")
+    body = await request.body()
+    if len(body) > 8 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Image must be 8 MB or smaller")
+    from .vision import analyze_photo
+    try:
+        return analyze_photo(body)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc

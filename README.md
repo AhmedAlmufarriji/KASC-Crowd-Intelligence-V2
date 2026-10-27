@@ -10,7 +10,7 @@
 ![Status](https://img.shields.io/badge/status-functional%20research%20prototype-1b786b?style=flat-square)
 ![Data](https://img.shields.io/badge/data-100%25%20synthetic-0e7490?style=flat-square)
 ![Horizon](https://img.shields.io/badge/forecast-15%20minutes-234e70?style=flat-square)
-![Tests](https://img.shields.io/badge/tests-25%20passing-3b8371?style=flat-square)
+[![Tests](https://github.com/AhmedAlmufarriji/KASC-Crowd-Intelligence-V2/actions/workflows/ci.yml/badge.svg)](https://github.com/AhmedAlmufarriji/KASC-Crowd-Intelligence-V2/actions/workflows/ci.yml)
 
 </div>
 
@@ -18,7 +18,9 @@
 
 ## Project preview
 
-![KASC V2 dashboard screenshot](docs/dashboard-preview.png)
+![Original computer-rendered KASC-inspired stadium illustration](static/stadium-kasc-inspired.svg)
+
+> **Updated stadium view:** The route panel now renders a new illustrative stadium roof, seating tiers and football pitch. Gate and walkway geometry is **synthetic** and is not an approved stadium map. [Computer vision and stadium design notes](docs/VISION_STADIUM.md).
 
 ## Why V2 exists
 
@@ -40,7 +42,8 @@ The original academic prototype explored congestion prediction, processing-time 
 | API-driven dashboard | FastAPI endpoints calculate changing results for selectable events, time bins and gates | A fake "live feed" or streaming sensor integration |
 | Congestion-aware routing | A **single tested topology** with 6 gates, 12 section targets, closures and weighted shortest paths | The actual stadium floor plan or certified evacuation routing |
 | Operations scenarios | A deterministic fluid-queue equation recomputes the effect of adding staffed lanes | A causal estimate calibrated with operational data |
-| Bilingual UI | Custom Arabic / English dashboard with SVG charts and an interactive route schematic | A deployed service with SSO, permissioning or monitoring |
+| Bilingual UI | Arabic / English dashboard with original stadium illustration and switchable route/architecture overlays | A surveyed venue map or deployed operational system |
+| Computer vision | Optional OpenCV segmentation of a user-provided image, green-field candidates and image edges | Surveyed, georeferenced, or certified KASC geometry |
 
 ## Quick start
 
@@ -50,10 +53,9 @@ Prerequisites: **Python 3.10 or later** and a recent desktop browser. Run all co
 
 ```powershell
 py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
-python -m kasc_v2.training
-python -m kasc_v2
+& .\.venv\Scripts\python.exe -m pip install -e ".[dev,vision]"
+& .\.venv\Scripts\python.exe -m kasc_v2.training
+& .\.venv\Scripts\python.exe -m kasc_v2
 ```
 
 **macOS / Linux**
@@ -77,6 +79,8 @@ Then open **http://127.0.0.1:8000** in your browser. Interactive API documentati
 3. In **Route intelligence**, select a gate and section, switch between **Congestion-aware** and **Shortest**, then select a walkway closure. Dijkstra recomputes the result; unreachable starts are reported honestly.
 4. In **Staffing scenario**, change added staffed lanes from +0 to +3. The result is calculated from an explicit queue equation, not a preset improvement percentage.
 5. Switch to **العربية** for a fully right-to-left interface.
+6. On the routing tab, switch between **Route overlay** and **Roof & stands** to inspect the new stadium artwork.
+7. In **Computer Vision Studio**, upload a permitted JPEG/PNG/WEBP (8 MB maximum); OpenCV processes it in memory and returns an annotated image.
 
 ## System overview
 
@@ -144,7 +148,7 @@ python -m pytest -q
 python -m compileall -q src
 ```
 
-GitHub Actions runs the tests on pushes and pull requests. Tests cover reproducibility, known future horizon, absence of target leakage in features, independent event splits, all gate-to-section pairs, closure handling, route cost invariants, FastAPI input validation, simulation claims, and scenario computations.
+GitHub Actions runs the core and optional computer-vision tests on pushes and pull requests. Tests cover reproducibility, known future horizon, absence of target leakage in features, independent event splits, all gate-to-section pairs, closure handling, route cost invariants, FastAPI input validation, simulation claims, and scenario computations.
 
 ## Documentation
 
@@ -153,6 +157,7 @@ GitHub Actions runs the tests on pushes and pull requests. Tests cover reproduci
 - [Model card and risks](docs/MODEL_CARD.md)
 - [Academic provenance and attribution](docs/PROJECT_HISTORY.md)
 - [Publishing this project to your GitHub](docs/PUBLISH_TO_GITHUB.md)
+- [Stadium-inspired visual design, CV experiment and limitations](docs/VISION_STADIUM.md)
 
 ## Future research directions
 
@@ -164,3 +169,7 @@ The next scientific steps require **authorized real observations**, externally v
 **Academic inspiration:** [KASC Crowd Management](https://github.com/BandarAlsarwani/KASC-Crowd-Management), an Umm Al-Qura University team graduation project (2025–2026). The source repository's attribution and intellectual-property statements remain in force for the original work.
 
 **Reuse:** No license grant is made by this repository README. Choose a license deliberately after reviewing ownership and any additional third-party materials.
+
+## Visual integrity
+
+The stadium reconstruction is original procedural SVG artwork **inspired by**, not an exact model of, King Abdullah Sports City. No official architectural or safety data is bundled. Routes, gates and sections remain synthetic and must not guide real attendees or emergency decisions.
