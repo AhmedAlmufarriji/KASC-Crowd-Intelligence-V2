@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kasc-crowd-intelligence-v2"
+version = "0.1.0"
+description = "Independent synthetic-data stadium crowd forecasting and congestion-aware routing demo"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.0,<3",
+  "scikit-learn>=1.4,<2",
+  "joblib>=1.3,<2",
+  "fastapi>=0.110,<1",
+  "uvicorn>=0.27,<1"
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "httpx>=0.27,<1", "ruff>=0.6"]
+
+[project.scripts]
+kasc-train = "kasc_v2.training:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

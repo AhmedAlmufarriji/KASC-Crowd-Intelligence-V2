@@ -1,0 +1,52 @@
+{
+  "project": "KASC Crowd Intelligence V2 \u2014 SYNTHETIC RESEARCH DEMO",
+  "dataset_kind": "generated / synthetic \u2014 not stadium measurements",
+  "generated_at_utc": "2026-10-27T15:29:05.331839+00:00",
+  "seed": 20261027,
+  "n_rows": 11340,
+  "n_events": 42,
+  "n_train_events": 31,
+  "n_test_events": 11,
+  "n_test_rows": 2970,
+  "train_test_event_overlap": 0,
+  "horizon_minutes": 15,
+  "features": [
+    "minute_index",
+    "attendance",
+    "temperature_c",
+    "lanes_open",
+    "service_per_lane",
+    "arrival_rate",
+    "queue_length",
+    "incident_flag",
+    "current_wait_min",
+    "gate",
+    "match_type"
+  ],
+  "classifier": {
+    "accuracy": 0.9458,
+    "macro_f1": 0.816,
+    "baseline_accuracy": 0.6855,
+    "baseline_macro_f1": 0.2711
+  },
+  "regressor": {
+    "mae_min": 0.8624,
+    "rmse_min": 1.9862,
+    "baseline": {
+      "mae_min": 10.8559,
+      "rmse_min": 14.8087
+    }
+  },
+  "labels": [
+    "High",
+    "Low",
+    "Medium"
+  ],
+  "notes": [
+    "Held-out events are unseen at training time; no rows from these events enter model fitting.",
+    "Reported metrics describe synthetic distribution generalization, not real-world safety performance.",
+    "Targets represent t+15min; features represent observations at t.",
+    "No hyperparameter selection was performed on the held-out event test split."
+  ],
+  "python": "3.13.5"
+}
